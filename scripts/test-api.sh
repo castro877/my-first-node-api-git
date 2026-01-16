@@ -14,7 +14,8 @@ CREATE_RES=$(curl -s -X POST "$BASE_URL/users" \
 echo "$CREATE_RES"
 echo -e "\n"
 
-USER_ID=$(echo "$CREATE_RES" | node -e "process.stdin.on('data',d=>{const j=JSON.parse(d); console.log(j.id)})")
+USER_ID=$(node -pe 'JSON.parse(require("fs").readFileSync(0,"utf8")).id' <<< "$CREATE_RES")
+
 
 echo "== GET /users/:id"
 curl -s "$BASE_URL/users/$USER_ID"
